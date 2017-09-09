@@ -21,15 +21,64 @@ int main()
 	sf::RenderWindow app(sf::VideoMode::getDesktopMode(), "Doooo", sf::Style::Fullscreen);
 	app.setFramerateLimit(60);
 
+
+	sf::Font font;
+	font.loadFromFile("BebasNeue.otf");
+
+	sf::Text run;
+	run.setFont(font);
+	run.setPosition(sf::Vector2f(app.getSize().x / 2 - 120, 150));
+	run.setString("Run!");
+	run.setCharacterSize(150);
+
+	sf::Text exit;
+	exit.setFont(font);
+	exit.setPosition(sf::Vector2f(app.getSize().x / 2 - 118, 350));
+	exit.setString("Exit");
+	exit.setCharacterSize(150);
+
+	
+
 	int x = 100;
 	int y = 200;
 	std::vector< std::vector <Block> > vec;
+	bool do_next_gen;
+	bool in_menu = true;
 
-	vec = create_rectangles_to_array(app,false);
-	bool do_next_gen = true;
-	
 	while (app.isOpen())
 	{
+
+		while (in_menu)
+		{
+			sf::Event e;
+			while (app.pollEvent(e))
+			{
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					sf::Vector2f mouse = (sf::Vector2f) sf::Mouse::getPosition();
+					sf::FloatRect txt = run.getGlobalBounds();
+					sf::FloatRect exit_t = exit.getGlobalBounds();
+					
+					if (txt.contains(mouse))
+					{
+						vec = create_rectangles_to_array(app, false);
+						do_next_gen = true;
+						in_menu = false;
+						break;
+					}
+					else if (exit_t.contains(mouse))
+					{
+						app.close();
+					}
+
+				}
+			}
+			app.clear(sf::Color(0, 0, 0));
+			app.draw(run);
+			app.draw(exit);
+			app.display();
+		}
+
 		sf::Event e;
 		while (app.pollEvent(e))
 		{
@@ -38,7 +87,7 @@ int main()
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 			{
-				app.close();
+				in_menu = true;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
 			{
@@ -60,7 +109,8 @@ int main()
 							if (vec.at(i).at(j).is_mouse_over(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y))
 							{
 								vec.at(i).at(j).set_alive(!vec.at(i).at(j).is_alive());
-								//app.draw(vec.at(i).at(j).get_block());
+								app.draw(vec.at(i).at(j).get_block());
+								app.display();
 							}
 
 						}
