@@ -27,15 +27,30 @@ int main()
 
 	sf::Text run;
 	run.setFont(font);
-	run.setPosition(sf::Vector2f(app.getSize().x / 2 - 120, 150));
+	run.setPosition(sf::Vector2f(app.getSize().x / 2 - 650, app.getSize().y / 2  - 193));
 	run.setString("Run!");
 	run.setCharacterSize(150);
+	run.setFillColor(sf::Color(100, 255, 100));
+
+	sf::Text options;
+	options.setFont(font);
+	options.setPosition(sf::Vector2f(app.getSize().x / 2 - 650, app.getSize().y / 2 - 54));
+	options.setString("Options");
+	options.setCharacterSize(120);
 
 	sf::Text exit;
 	exit.setFont(font);
-	exit.setPosition(sf::Vector2f(app.getSize().x / 2 - 118, 350));
+	exit.setPosition(sf::Vector2f(app.getSize().x / 2 - 650, app.getSize().y / 2 + 56));
 	exit.setString("Exit");
 	exit.setCharacterSize(150);
+	exit.setFillColor(sf::Color(255, 100, 100));
+
+	sf::Text explain;
+	explain.setFont(font);
+	explain.setPosition(sf::Vector2f(app.getSize().x / 2 - 112, app.getSize().y / 2 - 87));
+	explain.setString("N - Start new simulation \nB - Create your own cells \nP - Pause simulation (can edit) \nS - Continue simulation \nESC - exit to menu");
+	explain.setCharacterSize(75);
+	
 
 	
 
@@ -58,23 +73,48 @@ int main()
 					sf::Vector2f mouse = (sf::Vector2f) sf::Mouse::getPosition();
 					sf::FloatRect txt = run.getGlobalBounds();
 					sf::FloatRect exit_t = exit.getGlobalBounds();
+					sf::FloatRect opti = options.getGlobalBounds();
+
+					/*sf::FloatRect expl = explain.getGlobalBounds();
 					
+					std::cout << "RUN: " << run.getPosition().x - app.getSize().x / 2 << ", " << run.getPosition().y - app.getSize().y / 2 << std::endl;
+					std::cout << "Options: " << options.getPosition().x - app.getSize().x / 2 << ", " << options.getPosition().y - app.getSize().y / 2 << std::endl;
+					std::cout << "Exit: " << exit.getPosition().x - app.getSize().x / 2 << ", " << exit.getPosition().y - app.getSize().y / 2 << std::endl;
+					std::cout << "Explain: " << explain.getPosition().x - app.getSize().x / 2 << ", " << explain.getPosition().y - app.getSize().y / 2 << std::endl;*/
+
 					if (txt.contains(mouse))
 					{
 						vec = create_rectangles_to_array(app, false);
 						do_next_gen = true;
 						in_menu = false;
 						break;
+
+						//run.setPosition(sf::Vector2f(mouse.x - 75, mouse.y - 75));
 					}
 					else if (exit_t.contains(mouse))
 					{
 						app.close();
+
+						//exit.setPosition(sf::Vector2f(mouse.x - 75, mouse.y - 75));
 					}
+					else if (opti.contains(mouse))
+					{
+						
+						//TODO NIEÈO
+
+					}
+					/*else if (expl.contains(mouse))
+					{
+						explain.setPosition(sf::Vector2f(mouse.x - 75, mouse.y - 75));
+					}*/
 
 				}
 			}
+
 			app.clear(sf::Color(0, 0, 0));
+			app.draw(explain);
 			app.draw(run);
+			app.draw(options);
 			app.draw(exit);
 			app.display();
 		}
